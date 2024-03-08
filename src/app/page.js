@@ -1,4 +1,3 @@
-"use client";
 import Peer from "peerjs";
 import { useEffect, useRef, useState } from "react";
 
@@ -16,18 +15,20 @@ export default function Home() {
     });
 
     peerInstance.on("call", (call) => {
-      navigator.mediaDevices
-        .getUserMedia({ video: true, audio: true })
-        .then((stream) => {
-          vdref.current.srcObject = stream;
-          call.answer(stream); // Answer the call with an A/V stream.
-          call.on("stream", (remoteStream) => {
-            rmref.current.srcObject = remoteStream;
+      if (typeof navigator !== "undefined" && navigator.mediaDevices) {
+        navigator.mediaDevices
+          .getUserMedia({ video: true, audio: true })
+          .then((stream) => {
+            vdref.current.srcObject = stream;
+            call.answer(stream); // Answer the call with an A/V stream.
+            call.on("stream", (remoteStream) => {
+              rmref.current.srcObject = remoteStream;
+            });
+          })
+          .catch((err) => {
+            console.error("Failed to get local stream", err);
           });
-        })
-        .catch((err) => {
-          console.error("Failed to get local stream", err);
-        });
+      }
     });
 
     return () => {
@@ -37,18 +38,20 @@ export default function Home() {
 
   function callHandler() {
     if (peer) {
-      navigator.mediaDevices
-        .getUserMedia({ audio: true, video: true })
-        .then((stream) => {
-          vdref.current.srcObject = stream;
-          const call = peer.call(id, stream);
-          call.on("stream", (remoteStream) => {
-            rmref.current.srcObject = remoteStream;
+      if (typeof navigator !== "undefined" && navigator.mediaDevices) {
+        navigator.mediaDevices
+          .getUserMedia({ audio: true, video: true })
+          .then((stream) => {
+            vdref.current.srcObject = stream;
+            const call = peer.call(id, stream);
+            call.on("stream", (remoteStream) => {
+              rmref.current.srcObject = remoteStream;
+            });
+          })
+          .catch((err) => {
+            console.error("Failed to get local stream", err);
           });
-        })
-        .catch((err) => {
-          console.error("Failed to get local stream", err);
-        });
+      }
     }
   }
 
