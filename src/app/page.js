@@ -16,7 +16,7 @@ export default function Home() {
     });
 
     peerInstance.on("call", (call) => {
-      if (typeof navigator !== "undefined" && typeof window !== "undefined") {
+      if (navigator) {
         navigator.mediaDevices
           .getUserMedia({ video: true, audio: true })
           .then((stream) => {
@@ -39,7 +39,7 @@ export default function Home() {
 
   function callHandler() {
     if (peer) {
-      if (typeof navigator !== "undefined" && typeof window !== "undefined") {
+      if (navigator) {
         navigator.mediaDevices
           .getUserMedia({ audio: true, video: true })
           .then((stream) => {
