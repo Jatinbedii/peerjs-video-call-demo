@@ -1,3 +1,4 @@
+"use client";
 import Peer from "peerjs";
 import { useEffect, useRef, useState } from "react";
 
